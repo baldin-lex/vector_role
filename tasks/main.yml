@@ -1,6 +1,6 @@
 ---
 - name: Create directory vector
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   file:
     path: "{{ vector_path }}"
     state: directory
@@ -8,7 +8,7 @@
   tags:
     - vector
 - name: Get vector distrib
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.get_url:
     url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
     dest: "{{ vector_path }}/vector-{{ vector_version }}-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
@@ -16,7 +16,7 @@
   tags:
     - vector
 - name: Unarchive vector
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.unarchive:
     src: "{{ vector_path }}/vector-{{ vector_version }}-{{ ansible_architecture }}-unknown-linux-musl.tar.gz"
     dest: "{{ vector_path }}"
@@ -26,7 +26,7 @@
   tags:
     - vector
 - name: Create a symbolic link
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.file:
     src: "{{ vector_path }}/bin/vector"
     dest: /usr/bin/vector
@@ -36,7 +36,7 @@
   tags:
     - vector
 - name: Create vector unit flie
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.template:
     src: "{{ role_path }}/templates/vector.service.j2"
     dest: /etc/systemd/system/vector.service
@@ -46,7 +46,7 @@
   tags:
     - vector
 - name: Mkdir vector data
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.file:
     path: "{{ vector_data_path }}"
     owner: root
@@ -56,7 +56,7 @@
   tags:
     - vector
 - name: Vector config create
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   ansible.builtin.template:
     src: "{{ role_path }}/templates/vector.toml.j2"
     dest: "{{ vector_config }}"
@@ -67,7 +67,7 @@
   tags:
     - vector
 - name: Configuring service vector
-  become: true
+  become: "{{ 'false' if ansible_user_uid == 0 else 'true' }}"
   systemd:
     name: vector
     state: started
