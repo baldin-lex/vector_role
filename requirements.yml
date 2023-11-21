@@ -1,0 +1,4 @@
+---
+- name: vector
+  src: https://github.com/baldin-lex/vector_role.git
+  scm: git
