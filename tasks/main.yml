@@ -73,4 +73,4 @@
     state: started
     enabled: true
     daemon_reload: true
-  when: ansible_facts.virtualization_type != "docker"
+#  when: ansible_facts.virtualization_type != "docker"
